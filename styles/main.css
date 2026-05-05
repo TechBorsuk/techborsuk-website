@@ -1,0 +1,181 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --navy-950: #070e1a;
+    --navy-900: #0f172a;
+    --navy-800: #1e293b;
+    --navy-700: #2d3f55;
+    --blue-500: #4f72f8;
+    --blue-400: #7093fb;
+    --purple-500: #8b5cf6;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --white: #ffffff;
+    --gradient-brand: linear-gradient(135deg, #4f72f8 0%, #8b5cf6 100%);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy-900);
+    color: var(--white);
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(79,114,248,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 80%, rgba(139,92,246,0.07) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.page {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    padding: 24px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.logo-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.logo-img {
+    width: 96px;
+    height: 96px;
+    border-radius: 24px;
+    background-image: url('/assets/TechBorsuk-v3.png');
+    background-size: 100% 100%;
+    background-position: 0 0;
+    flex-shrink: 0;
+}
+
+.logo-wordmark {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+.logo-wordmark .tech {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.logo-wordmark .borsuk {
+    color: var(--white);
+}
+
+.tagline {
+    font-size: 0.875rem;
+    color: var(--gray-400);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    margin-bottom: 40px;
+    font-weight: 500;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.link-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--navy-800);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: all 150ms ease-out;
+    cursor: pointer;
+}
+
+.link-item:hover {
+    background: var(--navy-700);
+    border-color: rgba(255,255,255,0.16);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+
+.link-item:active {
+    transform: scale(0.97) translateY(0);
+}
+
+.link-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.link-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.link-label {
+    flex: 1;
+}
+
+.link-handle {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    font-weight: 400;
+    margin-top: 1px;
+}
+
+.link-arrow {
+    color: rgba(255,255,255,0.25);
+    flex-shrink: 0;
+    transition: color 150ms ease-out, transform 150ms ease-out;
+}
+.link-item:hover .link-arrow {
+    color: rgba(255,255,255,0.5);
+    transform: translateX(2px);
+}
+
+.icon-instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.icon-x         { background: #000000; border: 1px solid rgba(255,255,255,0.15); }
+.icon-facebook  { background: #1877f2; }
+.icon-github    { background: #24292f; border: 1px solid rgba(255,255,255,0.12); }
+.icon-tiktok    { background: #000000; border: 1px solid rgba(255,255,255,0.12); }
+.icon-youtube   { background: #ff0000; }
+.icon-threads   { background: #000000; border: 1px solid rgba(255,255,255,0.12); }
+.icon-email     { background: linear-gradient(135deg, #4f72f8 0%, #8b5cf6 100%); }
+
+.footer {
+    margin-top: 48px;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    text-align: center;
+}
