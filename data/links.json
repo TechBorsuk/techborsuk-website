@@ -1,0 +1,58 @@
+[
+  {
+    "id": "instagram",
+    "label": "Instagram",
+    "handle": "@techborsuk",
+    "url": "https://instagram.com/techborsuk",
+    "visible": true
+  },
+  {
+    "id": "facebook",
+    "label": "Facebook",
+    "handle": "TechBorsuk",
+    "url": "https://facebook.com/techborsuk",
+    "visible": true
+  },
+  {
+    "id": "x",
+    "label": "X (Twitter)",
+    "handle": "@techborsuk",
+    "url": "https://x.com/techborsuk",
+    "visible": true
+  },
+  {
+    "id": "threads",
+    "label": "Threads",
+    "handle": "@techborsuk",
+    "url": "https://threads.net/@techborsuk",
+    "visible": true
+  },
+  {
+    "id": "github",
+    "label": "GitHub",
+    "handle": "@techborsuk",
+    "url": "https://github.com/techborsuk",
+    "visible": true
+  },
+  {
+    "id": "tiktok",
+    "label": "TikTok",
+    "handle": "@techborsuk",
+    "url": "https://tiktok.com/@techborsuk",
+    "visible": true
+  },
+  {
+    "id": "youtube",
+    "label": "YouTube",
+    "handle": "TechBorsuk",
+    "url": "https://youtube.com/@TechBorsuk",
+    "visible": true
+  },
+  {
+    "id": "email",
+    "label": "Email",
+    "handle": "kontakt@techborsuk.pl",
+    "url": "mailto:kontakt@techborsuk.pl",
+    "visible": false
+  }
+]
