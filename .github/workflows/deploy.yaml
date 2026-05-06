@@ -58,9 +58,10 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL }}
         run: |
           lftp -e "
-            open -u $FTP_USER,$FTP_PASSWORD ftp://$FTP_HOST;
+            open -u $FTP_USER,$FTP_PASSWORD $FTP_PROTOCOL://$FTP_HOST;
             set ftp:ssl-allow no;
             set net:reconnect-interval-base 5;
             set net:max-retries 3;
@@ -74,6 +75,7 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL }}
         run: |
           if [ ! -s /tmp/to_upload.txt ] && [ ! -s /tmp/to_delete.txt ]; then
             echo "No deployable files changed."
@@ -81,7 +83,7 @@ jobs:
           fi
 
           {
-            echo "open -u $FTP_USER,$FTP_PASSWORD ftp://$FTP_HOST"
+            echo "open -u $FTP_USER,$FTP_PASSWORD $FTP_PROTOCOL://$FTP_HOST"
             echo "set ftp:ssl-allow no"
             echo "set net:reconnect-interval-base 5"
             echo "set net:max-retries 3"
