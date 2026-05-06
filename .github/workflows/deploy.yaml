@@ -13,11 +13,47 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install lftp
         run: sudo apt-get install -y lftp
 
-      - name: Deploy via FTP
+      - name: Compute changed files
+        id: changed
+        run: |
+          BEFORE="${{ github.event.before }}"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || \
+             [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "full_deploy=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          git diff --name-status "$BEFORE" HEAD > /tmp/all_changes.txt
+          cat /tmp/all_changes.txt
+
+          touch /tmp/to_upload.txt /tmp/to_delete.txt
+
+          grep -E '^[AMCT]' /tmp/all_changes.txt | awk '{print $2}' \
+            | grep -Ev '^(\.git|\.github|README\.md)' >> /tmp/to_upload.txt || true
+          grep '^R' /tmp/all_changes.txt | awk '{print $3}' \
+            | grep -Ev '^(\.git|\.github|README\.md)' >> /tmp/to_upload.txt || true
+
+          grep '^D' /tmp/all_changes.txt | awk '{print $2}' \
+            | grep -Ev '^(\.git|\.github|README\.md)' >> /tmp/to_delete.txt || true
+          grep '^R' /tmp/all_changes.txt | awk '{print $2}' \
+            | grep -Ev '^(\.git|\.github|README\.md)' >> /tmp/to_delete.txt || true
+
+          echo "--- Files to upload ---"
+          cat /tmp/to_upload.txt
+          echo "--- Files to delete ---"
+          cat /tmp/to_delete.txt
+
+          echo "full_deploy=false" >> $GITHUB_OUTPUT
+
+      - name: Full deploy via FTP
+        if: steps.changed.outputs.full_deploy == 'true'
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
@@ -31,3 +67,42 @@ jobs:
             mirror --reverse --delete --verbose --exclude=.git/ --exclude=.github/ --exclude=README.md ./ /www/;
             bye
           "
+
+      - name: Deploy changed files via FTP
+        if: steps.changed.outputs.full_deploy == 'false'
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          if [ ! -s /tmp/to_upload.txt ] && [ ! -s /tmp/to_delete.txt ]; then
+            echo "No deployable files changed."
+            exit 0
+          fi
+
+          {
+            echo "open -u $FTP_USER,$FTP_PASSWORD ftp://$FTP_HOST"
+            echo "set ftp:ssl-allow no"
+            echo "set net:reconnect-interval-base 5"
+            echo "set net:max-retries 3"
+
+            while IFS= read -r file; do
+              [ -z "$file" ] && continue
+              dir=$(dirname "$file")
+              echo "mkdir -p \"/www/$dir\""
+              echo "put -O \"/www/$dir\" \"$file\""
+            done < /tmp/to_upload.txt
+
+            while IFS= read -r file; do
+              [ -z "$file" ] && continue
+              echo "rm -f \"/www/$file\""
+            done < /tmp/to_delete.txt
+
+            echo "bye"
+          } > /tmp/lftp_script.txt
+
+          echo "=== lftp script ==="
+          cat /tmp/lftp_script.txt
+          echo "==================="
+
+          lftp -f /tmp/lftp_script.txt
